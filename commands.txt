@@ -1,0 +1,22 @@
+> bytecode = fs.readFileSync('Voting_sol_Voting.bin').toString()
+> abi = JSON.parse(fs.readFileSync('Voting_sol_Voting.abi').toString())
+
+> deployedContract = new web3.eth.Contract(abi)
+> listOfCandidates = ['Rama', 'Nick', 'Jose']
+> deployedContract.deploy({
+  data: bytecode,
+  arguments: [listOfCandidates.map(name => web3.utils.asciiToHex(name))]
+}).send({
+  from: 'ENTER 1 OF 10 ACCOUNT ADDRESSES like 0xfb3....',
+  gas: 1500000,
+  gasPrice: web3.utils.toWei('0.00003', 'ether')
+}).then((newContractInstance) => {
+  deployedContract.options.address = newContractInstance.options.address
+  console.log(newContractInstance.options.address)
+});
+
+
+> deployedContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call(console.log)
+> deployedContract.methods.voteForCandidate(web3.utils.asciiToHex('Rama')).send({from: 'YOUR ACCOUNT ADDRESS'}).then((f) => console.log(f))
+> deployedContract.methods.totalVotesFor(web3.utils.asciiToHex('Rama')).call(console.log)
+
